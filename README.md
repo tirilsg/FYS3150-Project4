@@ -51,6 +51,8 @@ Runs a simulation making use of a non-parallized version of our code `timerpar.c
 ### `varyingsize.cpp`:
 Makes use of the parallization method to simulate the behaviour of lattices of different sizes , and logging exoected values for an interval of temperature $T\epsilon [2,2.5]$ with temperature-steps dT=0.01 with an usage of by 10^5$ cycles.
 
+### `varyingsizezoom.cpp`:
+Includes the same simulation as `varyingsize.cpp`, but in a smaller temperature intervall $T\epsilon [2.2,2.4]$ with temperature-steps dT=0.005.
 
 --------------------
 
@@ -81,5 +83,5 @@ Imports the data obtained by running the simulations `timerpar.cpp` and `timerre
 
 
 ### `sizevariation.py`:
-Imports and loads data collected by compiling and running simulation defined in `varyingsize.cpp`, and uses the data to create a plot of expected values as a function of temperature for different size lattices. Further, the program creats a plot highlighting the heat capacity, and uses this to further model the critical temperature. The critical temperatures modelled from this data is printed in the terminal. 
+Imports and loads data collected by compiling and running simulation defined in `varyingsize.cpp` and `varyingsize.cpp`, and uses the data to create plots of expected values as a function of temperature for different size lattices. Further, the program creats a plot highlighting the heat capacity, and uses this to further model the critical temperature. The critical temperatures modelled from this data is printed in the terminal. 
 
