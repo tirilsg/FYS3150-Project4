@@ -3,7 +3,7 @@
 This repository contains c++ code constructing a model for a 2D Ising model, and using this model to run different simulations exploring the model and the physics behind it. The reopository is devided into maps `src`, `include`, `data`, `python` and `report`. Outside of these maps, in our main repository, the c++ files that run different kinds of simulations are stored. The model itself is defined in two seperate files, `IsingModel.cpp` and `IsingModel.hpp`, stored in maps `src` (for source files .cpp) and  `include` (for header files .hpp) dependent on their filetype. When running any simulations provided by the code in this repository, these maps have to be linked together when compiling.
 
 ----------------------
-## The class definition of the 2D Ising Model
+## The Class Definition of the 2D Ising Model
 The Ising Model is declared in the header file `IsingModel.hpp`, and further defined in our source file `IsingModel.cpp`. The purpouse of these definitions is to model the system, and then bring it as close to equilibrium as possible, which we do by developing methods based on theory presented in the report for our project.
 
 ### `IsingModel.hpp`:
@@ -15,88 +15,71 @@ The header file defines a good amount of methods:
  * `spinfile(ofstream& file_spins)` and  `expfile(int cycle, ofstream& filename)` are methods that are used to write data into .txt files. 
 
 ### `IsingModel.cpp`:
-Defines the methods and functions for the IsingModel class presented above
-
-
+Defines the methods and functions for the IsingModel class presented above: 
+* `initialize()` randomly initializes a lattice of size L x L with spins in conditions either +1 $\uparrow$ or -1 $\downarrow$
+* `initialize_ordered()` initializes a lattice of size L x L with ordered spins in +1 $\uparrow$ direction
+* `metropolis()` implements the metropolis algorithm explained in the report, to flip single spins and update energy and magnetization of the system if this operation closer to equilibrium, and counts the amount of times this algorithm has resulted in an accepted flip
+* `calculate_boltzmann(double T)` fills a previously filled with 0's vector with correct values for the boltzmann factor at the temerature T
+* `expval()` calculates expectation values defined by functions presented in report
+* `equilibrate(double T, int nr_cycles)` equilibrates the system by calling the metropolis function in a shortened intervall
+* `energycalc()` and `magcalc()` calculates the total energy and magnetization of the system from equations presented in the report
+* `simulate_log(double T, int nr_cycles)` and `simulate(double T, int nr_cycles)` both simulate the behaviour within the system of our lattice by calling the metropolis algorithm a numnber of `nr_cycles` times, or Monte Carlo Cycles, and calculating the expectation values each time `metropolis()` is called.
+* `reset()` fills the vector containing expectation values with zeros
 
 
 ----------------------
-## An overview of simulation-files in the main directory of the repository:
+## An Overview of Simulation-files in the Main Directory of the Repository:
 
-We make use of this class when performing all of the following simualtions. 
+We make use of this class when performing all of the following simualtions. All data collected by these simulations is stored as .txt files in the directory '/data'. 
 
 ### `2x2lattice.cpp`:
+Simulates and logs the behaviour of a 2 x 2 sized lattice for monte carlo cycles $10, 10^2 10^3, 10^4, 10^5$, in a temperature intervall $T\epsilon [0.5,4]$ with temperaturesteps dT=0.1. Data is stored with the base-name "2x2lattice" in our data-folder, with names _exp.txt, _flips.txt and _en.txt explaining their contents expectation values, amount of accepted flips, and energy. 
+
 ### `20x20lattice.cpp`:
+Simulates the behaviour of four different systems $20\times 20$ lattices - two at temperature T=1 with different methods of initializing spins `initialize()` and `initialize_ordered()`, and the other two at temperature T=2.4 also with different methods of initializing spins. An amount $10^6$ cycles is used in this simulation. The data of ordered spins is stored in files with base "20x20ordered", and the data for the randomly intialized spins are stored in files with base "20x20random".
+
 ### `20x20tchange.cpp`:
+Simulates the behaviour of a single $20\times 20$ lattice, by 10^6$ cycles over an interval of temperatures $T\epsilon [0,6]$ with temperaturesteps dT=0.1, and logs the data in .txt files. The data is saved in a .txt file with the base of the name of the file "20x20tchange". 
+
+
 ### `timerpar.cpp`:
+Runs a simulation making use of a parallelization of our code, to log how long it takes simulating an environment of $10^5$ monte carlo cycles, for an arbitrary temperature-interval, for different size lattices. The data is saved in a .txt file with the base of the name of the file "tmr5par". 
+
 ### `timerreg.cpp`:
+Runs a simulation making use of a non-parallized version of our code `timerpar.cpp`,and logs the timing data in a file "tmr5reg". 
+
 ### `varyingsize.cpp`:
+Makes use of the parallization method to simulate the behaviour of lattices of different sizes , and logging exoected values for an interval of temperature $T\epsilon [2,2.5]$ with temperature-steps dT=0.01 with an usage of by 10^5$ cycles.
 
-
-
-
-
-
-------------------------
-notes:
-### `particle_class.h`:
-Contains a class `Particle` that is used to define a particle by mass, charge, a position vector and a velocity vector. This class also contains a function `escape_test()` that checks whether the particle exists within the bounds of the penning trap. 
-
-### `penningtrap_class.h`:
-Contains a definition of the class `PenningTrap`, that defines the environment within a penning trap, and uses this to define methods `evolve_forward_Euler(dt,t)` and `evolve_RK4(dt,t)` that estimates particle's movement within the trap, with the method `evolve_RK4(dt,t)` set as the default trajectory-estimation-method. The class contains definitions of Booleans that defines whether the system is modelled as time-dependent (which is set to `false` by default), and whether the system estimates particle-trajectories by taking into consideration forces between particles that exist within the trap (also `false` by default). Also contains a method `particle_add()` that adds a particle into our system, and a function `count_particles()` that counts the amount of particles within the system.
-
-### `filltrap.cpp`:
-Contains a single function `fillPenningTrapWithRandomParticles(trap, number_of_particles)` that adds a number of Calcium ions into a system PenningTrap trap. 
-
-###`logging.cpp`:
-Contains a single function `saveDataToTxt(filename, data)` that takes an arbitrary filename, as well as a set of data, and writes the data into the file. 
-
-### `twoqmotion.cpp`:
-Contains code for a function `twoq(article1, particle2, max_t, iterations,filename, particle_int)` that adds two particles into a penning trap, and simulates their movement within the trap in an interval of time, and saves the data into a file by calling  `saveDataToTxt(filename, data)`. 
-
-### `zdirmotion.cpp`:
-Contains the implementations of a function `singleqmotion(particle, max_t, iterations, filename, useRK4)` that simulates the movement of a single particle within the environment of a penning trap. This function takes a Boolean useRK4 as argument, that dictates whether we use the method `evolve_RK4(dt,t)` to estimate the particle trajectory or not. The data is saved in a file.
-
-
-------------------------
-
-The simulations themselves is done by calling the functions implemented in the files above, which we simply link to each of our main programs. We decided to split the program code into two separate files, dependent on time-dependency, since the program `time_dependent.cpp` takes a long time to run.
-
-### `time_independent.cpp`:
-All the simulations done in this program is independent of time.
-This file contains code that estimates the movement of a single particle 1 in a penning trap, two particles 1 and 2 in a penning trap with and without particle interactions, and simulations for usage of both `evolve_forward_Euler(dt,t)` and `evolve_RK4(dt,t)` for a single particle 1. 
-
-
-### `time_dependent.cpp`:
-All the simulations done in this program is dependent of time.
-This program defines a function `simulateAndLogData(trap, filename, w_v, fs, max_t, iterations)` that fills a penning trap with particles, and estimates the trajectories of each of these particles by `evolve_RK4(dt,t)` and estimates how many particles are still trapped, for a vector containing different values for amplitudes and frequencies $w_v$ and stores the data for frequencies, and amount of trapped particles in a file. This function is called in our `main()`, and is used to create multiple simulations for a time-dependent system.
 
 --------------------
 
-### Linking and compiling of our project files:
-To run the program `time_independent.cpp`:
+## Linking and Compiling of Our Project Files:
+Each simulation is ran by running the following commands in the terminal, while beinf located in the correct directory:
+
 ```sh
-g++ time_independent.cpp src/*.cpp -I include -o time_independent -O2 -llapack -lblas -larmadillo
+g++ filename.cpp src/*.cpp -I include -o filename -O2 -llapack -lblas -larmadillo -fopenmp
+
 ```
 ```sh
-./time_independent
-```
-To run the program `time_dependent.cpp`:
-```sh
-g++ time_dependent.cpp src/*.cpp -I include -o time_dependent -O2 -llapack -lblas -larmadillo
-```
-```sh
-./time_dependent
+./filename
 ```
 
-----------------
+----------------------
 
-The simulations ran by the programs `time_independent.cpp` and `time_dependent.cpp` produce sets of data, which can be imported and visualized by running the python programs with the similar names: 
+## Visualizing Data By Running Python Programs:
+When ran, the simulations produce sets of data, which can be imported and visualized by running the python programs with the similar names, stored in the map 'python' in our repository: python 2x
 
-### `time_independent.py`:
-By running our program `time_independent.cpp`, we will obtain a number of files, which we can interpret and visualize by running the code in this python file. The program imports these files, and creates plots showing the particles movement in the xyz-plane, as well as relevant phase space plots, and an error analysis. 
+### `2x2.py`:
+Imports the data files created by the simulation `2x2lattice.cpp`, and creates plots comparing the modelled expectation values to the analytic expressions we obtained in our report. The program also creates a scatter plot showing how the accuracy improves with an increase in monte carlo cycles, as well as a plot of the relative error at $10^5$ monte carlo cycles. The program prints these errors in the expectation of energy and magnetization, as well as the amount of monte carlo cycles to the terminal so that they can be discussed.
+
+### `20x20.py`:
+Imports the data files created by the simulations `20x20lattice.cpp` and `20x20ltchange.cpp`, and uses it to visualize the expected energies and magnetization of each of the four environments of $20\times 20$ lattices as functions of monte carlo cycles. The program also creates plots using histograms for the different energy states, as well as a plot visalizing how the accepted flips of spins develops as temperature changes.  
+
+### `timer.py`:
+Imports the data obtained by running the simulations `timerpar.cpp` and `timerreg.cpp`, and visualizes the difference in run-time when using parallized code, versus not doing so in a plot. 
 
 
-### `time_dependent.py`:
-By running our program `time_dependent.cpp`, we will obtain a number of files, which we can interpret and visualize by running the code in this python file. The program imports these files, and returns plots visualizing the fraction of trapped particles as a function of the frequency $w_v$.
+### `sizevariation.py`:
+Imports and loads data collected by compiling and running simulation defined in `varyingsize.cpp`, and uses the data to create a plot of expected values as a function of temperature for different size lattices. Further, the program creats a plot highlighting the heat capacity, and uses this to further model the critical temperature. The critical temperatures modelled from this data is printed in the terminal. 
 
