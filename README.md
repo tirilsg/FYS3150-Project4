@@ -83,5 +83,5 @@ Imports the data obtained by running the simulations `timerpar.cpp` and `timerre
 
 
 ### `sizevariation.py`:
-Imports and loads data collected by compiling and running simulation defined in `varyingsize.cpp` and `varyingsize.cpp`, and uses the data to create plots of expected values as a function of temperature for different size lattices. Further, the program creats a plot highlighting the heat capacity, and uses this to further model the critical temperature. The critical temperatures modelled from this data is printed in the terminal. 
+Imports and loads data collected by compiling and running simulation defined in `varyingsize.cpp` and `varyingsizezoom.cpp`, and uses the data to create plots of expected values as a function of temperature for different size lattices. Further, the program creats a plot highlighting the heat capacity, and uses this to further model the critical temperature. The critical temperatures modelled from this data is printed in the terminal. 
 
