@@ -76,7 +76,7 @@ When ran, the simulations produce sets of data, which can be imported and visual
 Imports the data files created by the simulation `2x2lattice.cpp`, and creates plots comparing the modelled expectation values to the analytic expressions we obtained in our report. The program also creates a scatter plot showing how the accuracy improves with an increase in monte carlo cycles, as well as a plot of the relative error at $10^5$ monte carlo cycles. The program prints these errors in the expectation of energy and magnetization, as well as the amount of monte carlo cycles to the terminal so that they can be discussed.
 
 ### `20x20.py`:
-Imports the data files created by the simulations `20x20lattice.cpp` and `20x20ltchange.cpp`, and uses it to visualize the expected energies and magnetization of each of the four environments of $20\times 20$ lattices as functions of monte carlo cycles. The program also creates plots using histograms for the different energy states, as well as a plot visalizing how the accepted flips of spins develops as temperature changes.  
+Imports the data files created by the simulations `20x20lattice.cpp` and `20x20tchange.cpp`, and uses it to visualize the expected energies and magnetization of each of the four environments of $20\times 20$ lattices as functions of monte carlo cycles. The program also creates plots using histograms for the different energy states, as well as a plot visalizing how the accepted flips of spins develops as temperature changes.  
 
 ### `timer.py`:
 Imports the data obtained by running the simulations `timerpar.cpp` and `timerreg.cpp`, and visualizes the difference in run-time when using parallized code, versus not doing so in a plot. 
