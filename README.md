@@ -11,7 +11,7 @@ Contains a class `IsingModel` that defines and models the behaviour of particles
 The header file defines a good amount of methods:
  * `initialize()` and `initialize_ordered()` that will be used to define the direction of the intial spins in our system.
  * `calculate_boltzmann(double T)`, `expval()`, `energycalc()` and `magcalc()` that will be used to calculate boltzmann constants, expected values of energy E, magnetization M, $E^2$, $M^2$ and absoulte magnetization, as well as a short definition of the formulas for energy and magnetization calculations as function of spin.
- * `metropolis()` , `equilibrate(double T, int nr_cycles)`, `simulate_log(double T, int nr_cycles)`, `simulate(double T, int nr_cycles)`, `reset()` which are functions that will make use of the previous functions to flip a single spin at a time, and evaluate whether the system is closer to equilibrium or not, for an arbitrary amount of cycles, and either logs the data by `simulate_log()` or don't by `simulate()`, and then resets the system's expected values by `reset()`.
+ * `metropolis()` , `simulate_log(double T, int nr_cycles)`, `simulate(double T, int nr_cycles)`, `reset()` which are functions that will make use of the previous functions to flip a single spin at a time, and evaluate whether the system is closer to equilibrium or not, for an arbitrary amount of cycles, and either logs the data by `simulate_log()` or don't by `simulate()`, and then resets the system's expected values by `reset()`.
  * `spinfile(ofstream& file_spins)` and  `expfile(int cycle, ofstream& filename)` are methods that are used to write data into .txt files. 
 
 ### `IsingModel.cpp`:
@@ -21,7 +21,6 @@ Defines the methods and functions for the IsingModel class presented above:
 * `metropolis()` implements the metropolis algorithm explained in the report, to flip single spins and update energy and magnetization of the system if this operation closer to equilibrium, and counts the amount of times this algorithm has resulted in an accepted flip
 * `calculate_boltzmann(double T)` fills a previously filled with 0's vector with correct values for the boltzmann factor at the temerature T
 * `expval()` calculates expectation values defined by functions presented in report
-* `equilibrate(double T, int nr_cycles)` equilibrates the system by calling the metropolis function in a shortened intervall
 * `energycalc()` and `magcalc()` calculates the total energy and magnetization of the system from equations presented in the report
 * `simulate_log(double T, int nr_cycles)` and `simulate(double T, int nr_cycles)` both simulate the behaviour within the system of our lattice by calling the metropolis algorithm a numnber of `nr_cycles` times, or Monte Carlo Cycles, and calculating the expectation values each time `metropolis()` is called.
 * `reset()` fills the vector containing expectation values with zeros
